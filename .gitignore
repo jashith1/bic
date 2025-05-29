@@ -1,1 +1,3 @@
 /target
+/.bic
+src/test.py
