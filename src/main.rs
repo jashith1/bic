@@ -13,7 +13,7 @@ struct Cli {
 #[derive(Subcommand)]
 enum Commands {
     Init,
-    Commit
+    Commit,
 }
 
 fn main() -> std::io::Result<()>{
