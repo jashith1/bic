@@ -13,7 +13,7 @@ struct CommitData {
     files: HashMap<String, String>
 }
 
-pub fn commit() -> std::io::Result<()> {
+pub fn commit(commit_message: String) -> std::io::Result<()> {
     //make sure initialized
     if !Path::new(".bic").exists() {
         eprintln!("Error: not bic repository. Run `bic init` first.");
@@ -27,7 +27,7 @@ pub fn commit() -> std::io::Result<()> {
     //create actual commit data
     let commit_data = CommitData  {
         parent: read_current_head()?,
-        message: "Temporary commit message".to_string(),
+        message: commit_message,
         timestamp: get_current_timestamp(),
         files: files_map,
     };

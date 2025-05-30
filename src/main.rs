@@ -13,7 +13,10 @@ struct Cli {
 #[derive(Subcommand)]
 enum Commands {
     Init,
-    Commit,
+    Commit {
+        #[arg(short, long)]
+        message: String,
+    },
 }
 
 fn main() -> std::io::Result<()>{
@@ -22,7 +25,7 @@ fn main() -> std::io::Result<()>{
     //find which command is used
     match cli.command {
         Commands::Init => init_bic()?,
-        Commands::Commit => commit::commit()?,
+        Commands::Commit {message} => commit::commit(message)?,
     }
 
     Ok(())
