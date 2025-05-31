@@ -1,6 +1,8 @@
 use clap::{Parser, Subcommand};
 use std::{fs, path::Path};
 mod commit;
+mod log;
+pub mod util;
 
 #[derive(Parser)]
 #[command(name = "bic")]
@@ -17,6 +19,7 @@ enum Commands {
         #[arg(short, long)]
         message: String,
     },
+    Log,
 }
 
 fn main() -> std::io::Result<()>{
@@ -26,6 +29,7 @@ fn main() -> std::io::Result<()>{
     match cli.command {
         Commands::Init => init_bic()?,
         Commands::Commit {message} => commit::commit(message)?,
+        Commands::Log => log::log()?,
     }
 
     Ok(())

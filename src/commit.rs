@@ -1,17 +1,8 @@
 use std::{collections::HashMap, fs, path::Path};
 use sha2::{Digest, Sha256};
-use serde::Serialize;
 use walkdir::WalkDir;
 use ignore::gitignore::{Gitignore, GitignoreBuilder};
-
-//commit data stored in ./bic/commits json files
-#[derive(Serialize)]
-struct CommitData {
-    parent: String,
-    message: String,
-    timestamp: u64,
-    files: HashMap<String, String>
-}
+use crate::util::{read_head::read_current_head,commit_data::CommitData};
 
 pub fn commit(commit_message: String) -> std::io::Result<()> {
     //make sure initialized
@@ -99,11 +90,6 @@ fn calculate_hash(content: &str) -> String{
     let mut hasher = Sha256::new();
     hasher.update(content.as_bytes());
     format!("{:x}", hasher.finalize())
-}
-
-fn read_current_head() -> std::io::Result<String> {
-    let content = fs::read_to_string(".bic/HEAD")?;
-    Ok(content.trim().to_string())
 }
 
 fn get_current_timestamp() -> u64 {
