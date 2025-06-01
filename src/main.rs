@@ -3,6 +3,7 @@ use std::{fs, path::Path};
 mod commit;
 mod log;
 pub mod util;
+mod reset;
 
 #[derive(Parser)]
 #[command(name = "bic")]
@@ -20,6 +21,10 @@ enum Commands {
         message: String,
     },
     Log,
+    Reset {
+        #[arg(value_name = "COMMIT_HASH")]
+        commit_hash: String,
+    },
 }
 
 fn main() -> std::io::Result<()>{
@@ -30,6 +35,7 @@ fn main() -> std::io::Result<()>{
         Commands::Init => init_bic()?,
         Commands::Commit {message} => commit::commit(message)?,
         Commands::Log => log::log()?,
+        Commands::Reset {commit_hash} => reset::reset(commit_hash)?,
     }
 
     Ok(())

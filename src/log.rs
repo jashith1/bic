@@ -24,7 +24,7 @@ fn print_commit_details(commit_hash: String, is_head: bool) -> std::io::Result<(
     let commit_data: CommitData = serde_json::from_str(&commit_string)?;
 
     if is_head{
-        println!("Commit: {} (HEAD)", {commit_hash})
+        println!("Commit: {} (HEAD)", {commit_hash});
     } else {
         println!("Commit: {}", commit_hash);
     }

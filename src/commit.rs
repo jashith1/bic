@@ -1,8 +1,8 @@
 use std::{collections::HashMap, fs, path::Path};
 use sha2::{Digest, Sha256};
 use walkdir::WalkDir;
-use ignore::gitignore::{Gitignore, GitignoreBuilder};
-use crate::util::{read_head::read_current_head,commit_data::CommitData};
+use ignore::gitignore::{Gitignore};
+use crate::util::{build_ignore_matcher::build_ignore_matcher, commit_data::CommitData, read_head::read_current_head};
 
 pub fn commit(commit_message: String) -> std::io::Result<()> {
     //make sure initialized
@@ -29,26 +29,6 @@ pub fn commit(commit_message: String) -> std::io::Result<()> {
     Ok(())
 }
 
-fn build_ignore_matcher() -> Gitignore {
-    let mut builder = GitignoreBuilder::new(".");
-
-    // read patterns from .bic_ignore
-    if let Ok(contents) = fs::read_to_string(".bic_ignore") {
-        for line in contents.lines() {
-            let trimmed = line.trim();
-            if !trimmed.is_empty() && !trimmed.starts_with('#') {
-                builder.add_line(None, trimmed).unwrap();
-            }
-        }   
-    }
-
-    // add hardcoded patterns
-    builder.add_line(None, ".git").unwrap();
-    builder.add_line(None, ".bic").unwrap();
-
-    builder.build().unwrap()
-}
-
 fn collect_files(directory: &str, ignore: &Gitignore) -> std::io::Result<HashMap<String, String>> {
     let mut files_map: HashMap<String, String> = HashMap::new();
 
@@ -61,7 +41,7 @@ fn collect_files(directory: &str, ignore: &Gitignore) -> std::io::Result<HashMap
 
     //walkdir goes through subfolders too
     for entry in walker {
-        let entry = entry.unwrap();
+        let entry = entry?;
         let path = entry.path();
 
         //skip non files
