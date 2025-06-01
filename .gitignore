@@ -1,6 +1,6 @@
 /target
 /.bic
-src/test.py
-src/sub/*
+sub/*
 <4326.
 m<a3i.webp
+test.py

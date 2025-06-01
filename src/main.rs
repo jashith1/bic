@@ -54,7 +54,9 @@ fn init_bic() -> std::io::Result<()> {
     fs::create_dir(".bic/objects")?;
     fs::create_dir(".bic/commits")?;
     fs::write(".bic/HEAD", "null")?;
-    // fs::write(".bic_ignore", "")?;
+    if !Path::new(".bic_ignore").exists(){
+        fs::write(".bic_ignore", "")?;
+    }
     println!("Initialized empty bic repository.");
     Ok(())
 }

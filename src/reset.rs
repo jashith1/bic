@@ -6,12 +6,15 @@ use walkdir::WalkDir;
 use crate::util::{build_ignore_matcher::build_ignore_matcher, commit_data::CommitData};
 
 pub fn reset(commit_hash: String) -> std::io::Result<()>{
+    //make sure commit exists
     if !check_commit_hash(&commit_hash){
         println!("The given commit hash ({}) does not exist.", commit_hash);
         return Ok(())
     }
 
+    //remove all tracked files
     delete_new_files(&build_ignore_matcher())?;
+    //rewrite all tracked files from previous commit
     revert_to_commit(commit_hash)?;
 
     Ok(())
@@ -53,6 +56,9 @@ fn revert_to_commit(commit_hash: String) -> std::io::Result<()>{
 
         fs::write(file_path, file_content)?;
     }
+
+    //change HEAD to previous commit
+    fs::write(".bic/HEAD", commit_hash)?;
 
     Ok(())
 }

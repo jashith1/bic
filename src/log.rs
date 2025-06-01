@@ -2,6 +2,7 @@ use crate::util::{read_head::read_current_head,commit_data::CommitData};
 use std::{fs, path::Path};
 use serde_json;
 use chrono::{Local, TimeZone};
+use colored::Colorize;
 
 pub fn log() -> std::io::Result<()>{
     if !Path::new(".bic").exists() {
@@ -24,9 +25,9 @@ fn print_commit_details(commit_hash: String, is_head: bool) -> std::io::Result<(
     let commit_data: CommitData = serde_json::from_str(&commit_string)?;
 
     if is_head{
-        println!("Commit: {} (HEAD)", {commit_hash});
+        println!("Commit: {} {}", commit_hash.yellow(), "(HEAD)".blue());
     } else {
-        println!("Commit: {}", commit_hash);
+        println!("Commit: {}", commit_hash.yellow());
     }
 
     println!("Data: {}", unix_to_localtime(commit_data.timestamp));
