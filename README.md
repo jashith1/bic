@@ -36,6 +36,14 @@ bic log
 
 Reset to a commit:
 ```bash
-bic reset commit_hash
+bic reset <commit_hash>
 ```
 Resets workspace back to a previous commit
+
+## How it works
+Bic has all the core features you'd expect in a VCS
+- When you run bic commit, it hashes the contents of all tracked files and stores them in .bic/objects/, avoiding duplicates.
+- A commit metadata file is created in .bic/commits/ which stores the commit message, timestamp, parent hash, and a list of all tracked files as a key value pair of their hashes and actual file name.
+- The latest commit hash is saved in .bic/HEAD.
+- bic log reads the commit chain backwards using the parent links starting from HEAD.
+- bic reset <commit_hash> deletes all files in the workspace (except ignored ones) and restores files from the specified commit.
